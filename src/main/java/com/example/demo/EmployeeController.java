@@ -4,6 +4,7 @@ package com.example.demo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,24 +21,14 @@ public class EmployeeController {
     private EmployeeService employeeService;
 
 
-    @PostMapping("/users")
-    public List<Employee> getEmployees() {
+    @PostMapping("/emps/{pageNo}/{itemCount}")
+    public List<Employee> getEmployees(@PathVariable int pageNo, @PathVariable int itemCount) {
 
-        long startTime = System.nanoTime();
+        log.info("Request received!");
 
-        log.info("Start getting employee list at: " + startTime);
+        List<Employee> allEmp = employeeService.getAllEmp(pageNo, itemCount);
 
-        List<Employee> allEmp = employeeService.getAllEmp();
-
-        long endTime = System.nanoTime();
-
-        log.info("End getting employee list at: " + endTime);
-
-        var duration = (endTime - startTime);
-
-        log.info("Execution time taken to get Employee data: " + duration + " nano-seconds");
-
-        log.info("Execution time taken to get Employee data: " + (duration / 1000000000) + " seconds");
+        log.info("Execution completed!");
 
         return allEmp;
     }
